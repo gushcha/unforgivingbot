@@ -1,0 +1,21 @@
+user: unforgiving
+bot:
+  name: unforgiving
+  token: 5555555555:AAAAAAAAAAAAAAAAAAAAAAA
+db:
+  container: unforgiving_dbms
+  name: unforgiving_db
+  host: localhost
+  port: 5433
+  password_dbms: secret
+  user_submitter: submitter
+  password_submitter: secret_submitter
+  user_notifier: notifier
+  password_notifier: secret_notifier
+notifier:
+  runtime_delta: 720
+logging:
+  level: INFO
+  filename: '/var/log/unforgiving/unforgiving.log'
+  max_bytes: 1048576
+  backup_count: 5
