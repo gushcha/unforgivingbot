@@ -28,7 +28,7 @@ docker start $CONF_db_container
 
 if [ $? -ne 0 ]; then
     echo "Container unavailable, creating new $CONF_db_container"
-    docker run --name $CONF_db_container -e POSTGRES_PASSWORD=$CONF_db_password_dbms -p $CONF_db_port:5432 -v "$BASEDIR/data:/var/lib/postgresql/data" -d postgres
+    docker run --name $CONF_db_container -e POSTGRES_PASSWORD=$CONF_db_password_dbms -p $CONF_db_port:5432 -v "$BASEDIR/data:/var/lib/postgresql/data" -d postgres:15
 fi
 
 RETRIES=10

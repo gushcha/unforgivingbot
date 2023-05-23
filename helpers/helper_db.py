@@ -19,6 +19,7 @@ async def _connect(user: str, password: str) -> None:
 async def connect_submitter():
     config = get_config()
     await _connect(config.db_user_submitter, config.db_password_submitter)
+    await __asyncConnection.set_autocommit(False)
 
 
 async def connect_notifier():
