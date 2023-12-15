@@ -35,7 +35,12 @@ class Listener():
                                    f'/{REQUEST_METHOD_GET_UPDATES}?offset={self.__offset + 1}'))\
                 as response:
             responseObject = await response.json(encoding='UTF-8')
-            if (responseObject['ok'] & (type(responseObject['result']) is list)):
+            if (
+                    'ok' in responseObject 
+                    and responseObject['ok'] 
+                    and 'result' in responseObject 
+                    and (type(responseObject['result']) is list)
+                ):
                 offset = self.processor.process(
                     responseObject['result'], self.__offset)
                 self.__offset = offset

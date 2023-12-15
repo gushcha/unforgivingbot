@@ -31,7 +31,8 @@ class RequestBase(ABC):
             json=self.get_json()
         ) as response:
             get_logger().debug(f'Sent request: {response.request_info}')
-            if response.status != 200:
-                tg_response = await response.json(encoding='UTF-8')
-                get_logger().error(f'Failed to send request: {tg_response}')
+            if response.status == 403:
+                get_logger().warn(f'Failed to send request: {await response.json(encoding="UTF-8")}')
+            elif response.status != 200:
+                get_logger().error(f'Failed to send request: {await response.json(encoding="UTF-8")}')
             response.close()

@@ -113,9 +113,9 @@ Bot is written in python and uses dockered postgres dbms, please make sure follo
 
 4. Create python virtual environment and install dependencies
    ```sh
-   sudo python -m venv venv
+   sudo python3 -m venv venv
    source venv/bin/activate
-   python -m pip install -r requirements.txt
+   python3 -m pip install -r requirements.txt
    sudo mkdir /var/log/unforgiving/
    sudo chown -R $USER /var/log/unforgiving/
    sudo chmod -R g+rw /var/log/unforgiving/
@@ -145,7 +145,7 @@ Bot consists of multiple running services `docker postgres`, `notifier` and `sub
     sudo bash ./scripts/create_submitter_service.sh
     sudo systemctl start unforgivingbot.service
     cd ../
-    python start_submitter.py 
+    python3 start_submitter.py 
     ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
