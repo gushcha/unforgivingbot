@@ -13,6 +13,7 @@ from helpers.helper_logger import get_logger
 
 # CONST
 DEFAULT_STEP = 3
+SLEEP_ON_ERROR = 5
 
 
 class Listener():
@@ -31,21 +32,29 @@ class Listener():
             await asyncio.sleep(self.__step)
 
     async def requestUpdates(self):
-        async with request('GET', (f'{URL_TELEGRAM_API}{self.bot_token}'
-                                   f'/{REQUEST_METHOD_GET_UPDATES}?offset={self.__offset + 1}'))\
-                as response:
-            responseObject = await response.json(encoding='UTF-8')
-            if (
-                    'ok' in responseObject 
-                    and responseObject['ok'] 
-                    and 'result' in responseObject 
-                    and (type(responseObject['result']) is list)
-                ):
-                offset = self.processor.process(
-                    responseObject['result'], self.__offset)
-                self.__offset = offset
-                return
-            raise ValueError('Unexpected tg response', responseObject)
+        try:
+            async with request('GET', (f'{URL_TELEGRAM_API}{self.bot_token}'
+                                    f'/{REQUEST_METHOD_GET_UPDATES}?offset={self.__offset + 1}'))\
+                    as response:
+                responseObject = await response.json(encoding='UTF-8')
+                if (
+                        'ok' in responseObject 
+                        and responseObject['ok'] 
+                        and 'result' in responseObject 
+                        and (type(responseObject['result']) is list)
+                    ):
+                    offset = self.processor.process(
+                        responseObject['result'], self.__offset)
+                    self.__offset = offset
+                    return
+                
+                get_logger().warn('Unexpected tg response', responseObject)
+                if 'error_code' in responseObject and responseObject['error_code'] == 429:
+                    await asyncio.sleep(SLEEP_ON_ERROR)
+        
+        except Exception as e:
+            get_logger().exception(e)
+            await asyncio.sleep(SLEEP_ON_ERROR)
 
 
 async def start():
